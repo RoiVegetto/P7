@@ -2,7 +2,7 @@ const UserModel = require('../models/user.model');
 const fs = require('fs');
 const { promisify } = require('util');
 const pipeline = promisify(require('stream').pipeline);
-const { uploadErrors } = require('../utils/error.utlis');
+const { uploadErrors } = require('../utils/error.utils');
 
 module.exports.uploadProfil = async (req, res) => {
     try {
@@ -23,7 +23,7 @@ module.exports.uploadProfil = async (req, res) => {
     await pipeline(
         req.file.stream,
         fs.createWriteStream(
-            `${_dirname}/../client/public/uploads/profil/${fileName}`
+            `${__dirname}/../client/public/uploads/profil/${fileName}`
         )
     );
 
@@ -34,10 +34,10 @@ module.exports.uploadProfil = async (req, res) => {
             { new: true, upsert: true, setDefaultsOnInsert: true},
             (err, docs) => {
                 if (!err) return res.send(docs);
-                else return res.status(500).send({ message: err});
+                else return res.status(500).send({ message: err });
             }
         );
     }   catch (err) {
-        return res.status(500).send({ message: err});
+        return res.status(500).send({ message: err });
     }
 };
