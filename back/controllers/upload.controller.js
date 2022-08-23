@@ -1,14 +1,14 @@
 const UserModel = require('../models/user.model');
 const fs = require('fs');
 const { promisify } = require('util');
-const { uploadErrors } = require('../utils/error.utlis');
 const pipeline = promisify(require('stream').pipeline);
+const { uploadErrors } = require('../utils/error.utlis');
 
 module.exports.uploadProfil = async (req, res) => {
     try {
-        if (req.file.detectedMimeType !== "image/jpg" && 
-            req.file.detectedMimeType !== "image/png" && 
-            req.file.detectedMimeType !== "image/jpeg"
+        if (req.file.detectedMimeType != "image/jpg" && 
+            req.file.detectedMimeType != "image/png" && 
+            req.file.detectedMimeType != "image/jpeg"
         )
             throw Error("invalid file");
 

@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema(
             required: true,
             validate: [isEmail],
             lowercase: true,
+            unique: true,
             trim: true,
         },
         password: {
@@ -38,7 +39,7 @@ const userSchema = new mongoose.Schema(
     }
 )
 
-// play function before save into display: 'block'
+// play function before save into db
 userSchema.pre("save", async function(next) {
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt);
@@ -55,7 +56,7 @@ userSchema.statics.login = async function(email, password) {
         throw Error('incorrect password');
     }
     throw Error('incorrect email')
-}
+};
 
 const UserModel = mongoose.model("user", userSchema);
 
