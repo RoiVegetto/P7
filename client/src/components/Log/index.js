@@ -22,17 +22,17 @@ const Log = (props) => {
         <ul>
           <li
             onClick={handleModals}
-            id="register"
-            className={signUpModal ? 'active-btn' : null}
-          >
-            S'inscrire
-          </li>
-          <li
-            onClick={handleModals}
             id="login"
             className={signInModal ? 'active-btn' : null}
           >
             Se connecter
+          </li>
+          <li
+            onClick={handleModals}
+            id="register"
+            className={signUpModal ? 'active-btn' : null}
+          >
+            S'inscrire
           </li>
         </ul>
         {signUpModal && <SignUpForm />}

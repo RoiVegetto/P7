@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { UidContext } from './AppContext';
-import Logout from "./Log/Logout";
+import Logout from './Log/Logout';
 
 const Navbar = () => {
   const uid = useContext(UidContext);
@@ -23,20 +23,13 @@ const Navbar = () => {
           <ul>
             <li></li>
             <li className="welcome">
-              <NavLink exact to="/profil">
-                <h5>Bienvenu {userData.pseudo}</h5>
-              </NavLink>
+              <h5>Bienvenu {userData.pseudo}</h5>
             </li>
             <Logout />
           </ul>
         ) : (
           <ul>
             <li></li>
-            <li>
-              <NavLink exact to="/profil">
-                <img src="./img/icons/login.svg" alt="login" />
-              </NavLink>
-            </li>
           </ul>
         )}
       </div>
