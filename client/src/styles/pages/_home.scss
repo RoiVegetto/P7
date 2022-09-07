@@ -1,7 +1,7 @@
 .home {
   max-width: 1200px;
   overflow: hidden;
-  margin: 58px auto 50px;
+  margin: 58px 30px 50px;
   position: relative;
 
   @media screen and(max-width: 990px) {
@@ -99,7 +99,9 @@
     grid-template-columns: 60% 40%;
 
     @media screen and(max-width: 885px) {
-      grid-template-columns: 1fr;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
   }
 
@@ -197,14 +199,8 @@
     img {
       height: 280px;
 
-      @media screen and(max-width: 1050px) {
-        height: 220px;
-      }
-      @media screen and(max-width: 950px) {
-        height: 200px;
-      }
       @media screen and(max-width: 885px) {
-        display: none;
+        height: 350px;
       }
     }
   }

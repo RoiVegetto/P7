@@ -15,36 +15,32 @@ module.exports.readPost = (req, res) => {
 };
 
 module.exports.createPost = async (req, res) => {
-  let fileName;
+  console.log('here');
 
-  if (req.file !== null) {
+  if (req.file !== null && req.file !== undefined) {
     try {
       if (
-        req.file.detectedMimeType != 'image/jpg' &&
-        req.file.detectedMimeType != 'image/png' &&
-        req.file.detectedMimeType != 'image/jpeg'
-      )
+        req.file.mimetype != 'image/jpg' &&
+        req.file.mimetype != 'image/png' &&
+        req.file.mimetype != 'image/gif' &&
+        req.file.mimetype != 'image/jpeg'
+      ) {
         throw Error('invalid file');
+      }
 
-      if (req.file.size > 500000) throw Error('max size');
+      if (req.file.size > 500000) {
+        throw Error('max size');
+      }
     } catch (err) {
       const errors = uploadErrors(err);
       return res.status(201).json({ errors });
     }
-    fileName = req.body.posterId + Date.now() + '.jpg';
-
-    await pipeline(
-      req.file.stream,
-      fs.createWriteStream(
-        `${__dirname}/../client/public/uploads/posts/${fileName}`
-      )
-    );
   }
 
   const newPost = new postModel({
     posterId: req.body.posterId,
     message: req.body.message,
-    picture: req.file !== null ? './uploads/posts/' + fileName : '',
+    picture: req.file !== null ? './uploads/posts/' + req.file.filename : '',
     likers: [],
     comments: [],
   });
@@ -86,62 +82,50 @@ module.exports.deletePost = (req, res) => {
   });
 };
 
-module.exports.likePost = async (req, res) => {
+module.exports.likePost = async function (req, res) {
   if (!ObjectID.isValid(req.params.id))
-    return res.status(400).send('ID unknown : ' + req.params.id);
+    return res.status(400).json('ID unknown : ' + req.params.id);
 
-  try {
-    await PostModel.findByIdAndUpdate(
-      req.params.id,
-      {
-        $addToSet: { likers: req.body.id },
-      },
-      { new: true }
-    )
-      .then((data) => res.send(data))
-      .catch((err) => res.status(500).send({ message: err }));
+  await PostModel.findByIdAndUpdate(
+    req.params.id,
+    {
+      $addToSet: { likers: req.body.id },
+    },
+    { new: true }
+  );
 
-    await UserModel.findByIdAndUpdate(
-      req.body.id,
-      {
-        $addToSet: { likes: req.params.id },
-      },
-      { new: true }
-    )
-      .then((data) => res.send(data))
-      .catch((err) => res.status(500).send({ message: err }));
-  } catch (err) {
-    return res.status(400).send(err);
-  }
+  await UserModel.findByIdAndUpdate(
+    req.body.id,
+    {
+      $addToSet: { likes: req.params.id },
+    },
+    { new: true }
+  );
+
+  return res.status(200).json({ success: true });
 };
 
-module.exports.unlikePost = async (req, res) => {
+module.exports.unlikePost = async function (req, res) {
   if (!ObjectID.isValid(req.params.id))
-    return res.status(400).send('ID unknown : ' + req.params.id);
+    return res.status(400).json('ID unknown : ' + req.params.id);
 
-  try {
-    await PostModel.findByIdAndUpdate(
-      req.params.id,
-      {
-        $pull: { likers: req.body.id },
-      },
-      { new: true }
-    )
-      .then((data) => res.send(data))
-      .catch((err) => res.status(500).send({ message: err }));
+  await PostModel.findByIdAndUpdate(
+    req.params.id,
+    {
+      $pull: { likers: req.body.id },
+    },
+    { new: true }
+  );
 
-    await UserModel.findByIdAndUpdate(
-      req.body.id,
-      {
-        $pull: { likes: req.params.id },
-      },
-      { new: true }
-    )
-      .then((data) => res.send(data))
-      .catch((err) => res.status(500).send({ message: err }));
-  } catch (err) {
-    return res.status(400).send(err);
-  }
+  await UserModel.findByIdAndUpdate(
+    req.body.id,
+    {
+      $pull: { likes: req.params.id },
+    },
+    { new: true }
+  );
+
+  return res.status(200).json({ success: true });
 };
 
 module.exports.commentPost = (req, res) => {

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { dateParser, isEmpty } from '../Utils';
 import LikeButton from './LikeButton';
-import { updatePost } from "../../actions/post.actions";
-import DeleteCard from "./DeleteCard";
-import CardComments from "./CardComments";
+import { updatePost } from '../../actions/post.actions';
+import DeleteCard from './DeleteCard';
+import CardComments from './CardComments';
 
 const Card = ({ post }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -32,20 +32,6 @@ const Card = ({ post }) => {
         <i className="fas fa-spinner fa-spin"></i>
       ) : (
         <>
-          <div className="card-left">
-            <img
-              src={
-                !isEmpty(usersData[0]) &&
-                usersData
-                  .map((user) => {
-                    if (user._id === post.posterId) return user.picture;
-                    else return null;
-                  })
-                  .join("")
-              }
-              alt="poster-pic"
-            />
-          </div>
           <div className="card-right">
             <div className="card-header">
               <div className="pseudo">
@@ -56,7 +42,7 @@ const Card = ({ post }) => {
                         if (user._id === post.posterId) return user.pseudo;
                         else return null;
                       })
-                      .join("")}
+                      .join('')}
                 </h3>
               </div>
               <span>{dateParser(post.createdAt)}</span>
@@ -78,7 +64,7 @@ const Card = ({ post }) => {
             {post.picture && (
               <img src={post.picture} alt="card-pic" className="card-pic" />
             )}
-            {userData._id === post.posterId && (
+            {(userData._id === post.posterId || userData.isAdmin) && (
               <div className="button-container">
                 <div onClick={() => setIsUpdated(!isUpdated)}>
                   <img src="./img/icons/edit.svg" alt="edit" />
@@ -96,7 +82,6 @@ const Card = ({ post }) => {
                 <span>{post.comments.length}</span>
               </div>
               <LikeButton post={post} />
-              <img src="./img/icons/share.svg" alt="share" />
             </div>
             {showComments && <CardComments post={post} />}
           </div>
