@@ -46,15 +46,15 @@ const NewPostForm = () => {
         <i className="fas fa-spinner fa-pulse"></i>
       ) : (
         <>
-          <NavLink exact to="/">
-          </NavLink>
           <div className="post-form">
+            <label for="message">Postez votre message ici</label>
             <textarea
               name="message"
               id="message"
               placeholder="Quoi de neuf ?"
               onChange={(e) => setMessage(e.target.value)}
               value={message}
+              label="id"
             />
             {message || postPicture ? (
               <li className="card-container">
@@ -77,6 +77,7 @@ const NewPostForm = () => {
                 {isEmpty() && (
                   <>
                     <img src="./img/icons/picture.svg" alt="img" />
+                    <label for="file-upload">Photo</label>
                     <input
                       type="file"
                       id="file-upload"
