@@ -76,8 +76,8 @@ const NewPostForm = () => {
               <div className="icon">
                 {isEmpty() && (
                   <>
-                    <img src="./img/icons/picture.svg" alt="img" />
                     <label for="file-upload">Photo</label>
+                    <img src="./img/icons/picture.svg" alt="img" />
                     <input
                       type="file"
                       id="file-upload"
